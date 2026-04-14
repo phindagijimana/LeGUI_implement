@@ -1,0 +1,22 @@
+# Local MATLAB Runtime install (multi-GB; install per README)
+MATLAB_Runtime/
+
+# Large MATLAB Runtime installer artifacts
+mcr_R2021b_glnxa64.zip
+mcr_R2021b_unzip/
+LeGUI_Linux_v1.2.zip
+
+# Logs
+mcr_download.log
+*.log
+logs/
+
+# Optional: omit binary bundle from git (uncomment if versioning this folder)
+# LeGUI_Linux_v1.2.zip
+# LeGUI_Linux_v1.2/LeGUI_Linux
+
+# Runtime state
+.legui.pid
+
+# OS
+.DS_Store

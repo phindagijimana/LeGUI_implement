@@ -1,0 +1,50 @@
+LeGUI — what was installed on this machine (Apr 2026)
+======================================================
+
+Quick reference: README.md in this folder (table of contents + commands).
+
+CLI (recommended):
+  ./LeGUI help | install | start | logs | stop | checks
+  ./LeGUI install --silent-mcr   (only if MCR missing; long run)
+
+Verify install: ./verify_legui_setup.sh   or   ./LeGUI checks
+Optional disk cleanup: ./post_install_cleanup.sh --yes
+
+
+1) Source repository (git)
+   Path: Documents/LeGUI/legui-repo/
+   Contains: LeGUI/LeGUI.mlapp, bundled SPM12 under LeGUI/, PDF guides at repo root.
+
+2) MATLAB Runtime R2021b (v9.11) — INSTALLED
+   Path: Documents/LeGUI/MATLAB_Runtime/v911/
+   Installer log: Documents/LeGUI/mcr_install.log  (should end with "End - Successful")
+   Source zip (optional to delete ~3.7 GB): Documents/LeGUI/mcr_R2021b_glnxa64.zip
+   Unpacked installer: Documents/LeGUI/mcr_R2021b_unzip/  (optional to delete after success)
+
+3) Compiled Linux app (release v1.2)
+   Path: Documents/LeGUI/LeGUI_Linux_v1.2/
+   Files: LeGUI_Linux, run_LeGUI_Linux.sh, atlases/
+
+   EASIEST START (uses local MCR automatically):
+     cd Documents/LeGUI
+     chmod -R u+rwX LeGUI_Linux_v1.2/atlases
+     ./run_LeGUI.sh
+
+   Or call the upstream script directly:
+     ./LeGUI_Linux_v1.2/run_LeGUI_Linux.sh "$(pwd)/MATLAB_Runtime/v911"
+
+   Release notes for v1.2: https://github.com/Rolston-Lab/LeGUI/releases/tag/v1.2
+
+4) Run from MATLAB instead of the binary (no MCR, needs license)
+   Toolboxes (run "ver" in MATLAB): Image Processing, Parallel Computing,
+   Statistics and Machine Learning.
+   In MATLAB:
+     cd('<full-path>/Documents/LeGUI/legui-repo/LeGUI')
+     addpath(fullfile(pwd, 'icons'))
+     LeGUI
+
+5) Documentation in the clone
+   legui-repo/LeGUI_InstallationGuide.pdf
+   legui-repo/LeGUI_UserManual.pdf
+
+6) Optional: LeGUI_Linux_v1.2.zip (~38 MB) can be deleted if the folder LeGUI_Linux_v1.2/ is intact.

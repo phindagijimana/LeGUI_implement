@@ -1,0 +1,180 @@
+#!/usr/bin/env bash
+# LeGUI deployment CLI: install | start | logs | stop | checks
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+PID_FILE="${ROOT}/.legui.pid"
+LOG_DIR="${ROOT}/logs"
+APP_LOG="${LOG_DIR}/legui.log"
+RUN_SCRIPT="${ROOT}/run_LeGUI.sh"
+VERIFY_SCRIPT="${ROOT}/verify_legui_setup.sh"
+MCR_DEST="${ROOT}/MATLAB_Runtime"
+MCR_UNZIP="${ROOT}/mcr_R2021b_unzip"
+
+usage() {
+  cat <<EOF
+Usage: $(basename "$0") <command> [options]
+
+  install          Prepare this tree (permissions, logs dir) and run checks.
+                   With --silent-mcr: run MATLAB Runtime silent install from ${MCR_UNZIP}/ (only if ${MCR_DEST}/v911 is missing).
+
+  start            Launch LeGUI (foreground). Extra args pass through to the app.
+  start --background | -b   Launch in background; stdout/stderr -> ${APP_LOG}
+
+  logs             Show recent lines from ${APP_LOG}
+  logs -f          Follow the log (tail -f)
+
+  stop             Stop background LeGUI (uses ${PID_FILE})
+
+  checks           Run full verification (${VERIFY_SCRIPT##*/})
+
+  help             Show this message
+
+Environment:
+  LEGUI_MCR_ROOT   Override MATLAB Runtime root (passed to ${RUN_SCRIPT##*/})
+
+Examples:
+  ./LeGUI install
+  ./LeGUI checks
+  ./LeGUI start
+  ./LeGUI start --background
+  ./LeGUI logs -f
+  ./LeGUI stop
+EOF
+}
+
+cmd_install() {
+  local do_mcr=0
+  for a in "$@"; do
+    case "$a" in
+      --silent-mcr) do_mcr=1 ;;
+      -h|--help) usage; exit 0 ;;
+      *) echo "Unknown option for install: $a" >&2; usage >&2; exit 2 ;;
+    esac
+  done
+
+  mkdir -p "$LOG_DIR"
+  chmod -R u+rwX "${ROOT}/LeGUI_Linux_v1.2/atlases" 2>/dev/null || true
+  chmod +x "$RUN_SCRIPT" "$VERIFY_SCRIPT" "${ROOT}/LeGUI_Linux_v1.2/run_LeGUI_Linux.sh" \
+    "${ROOT}/LeGUI_Linux_v1.2/LeGUI_Linux" 2>/dev/null || true
+  chmod +x "${ROOT}/LeGUI" 2>/dev/null || true
+
+  if [[ "$do_mcr" -eq 1 ]]; then
+    if [[ -d "${MCR_DEST}/v911/runtime/glnxa64" ]]; then
+      echo "MATLAB Runtime already present at ${MCR_DEST}/v911 — skipping silent install."
+    elif [[ -x "${MCR_UNZIP}/install" ]]; then
+      echo "Running MATLAB Runtime silent install into ${MCR_DEST} ..."
+      ( cd "$MCR_UNZIP" && ./install -mode silent -agreeToLicense yes -destinationFolder "$MCR_DEST" ) \
+        | tee -a "${LOG_DIR}/mcr_silent_install.log"
+      echo "MCR install finished. See ${LOG_DIR}/mcr_silent_install.log"
+    else
+      echo "ERROR: No installer at ${MCR_UNZIP}/install. Unzip mcr_R2021b_glnxa64.zip first." >&2
+      exit 1
+    fi
+  fi
+
+  echo "Running checks ..."
+  "$VERIFY_SCRIPT"
+  echo "Install step complete. Start with: $ROOT/LeGUI start"
+}
+
+cmd_checks() {
+  exec "$VERIFY_SCRIPT"
+}
+
+cmd_start() {
+  local background=0
+  local pass=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --background|-b) background=1; shift ;;
+      -h|--help)
+        echo "Usage: $(basename "$0") start [--background|-b] [app-args...]"
+        exit 0
+        ;;
+      *) pass+=("$1"); shift ;;
+    esac
+  done
+
+  if [[ "$background" -eq 1 ]]; then
+    mkdir -p "$LOG_DIR"
+    if [[ -f "$PID_FILE" ]]; then
+      local old
+      old="$(cat "$PID_FILE" 2>/dev/null || true)"
+      if [[ -n "$old" ]] && kill -0 "$old" 2>/dev/null; then
+        echo "LeGUI may already be running (pid $old). Stop it first or remove stale $PID_FILE" >&2
+        exit 1
+      fi
+    fi
+    echo "$(date -Iseconds) starting LeGUI (background) -> $APP_LOG" >> "$APP_LOG"
+    # shellcheck disable=SC2086
+    nohup "$RUN_SCRIPT" "${pass[@]}" >> "$APP_LOG" 2>&1 &
+    echo $! > "$PID_FILE"
+    echo "Started in background pid $(cat "$PID_FILE"). Logs: $APP_LOG"
+    return 0
+  fi
+
+  exec "$RUN_SCRIPT" "${pass[@]}"
+}
+
+cmd_logs() {
+  mkdir -p "$LOG_DIR"
+  [[ -f "$APP_LOG" ]] || touch "$APP_LOG"
+  if [[ "${1:-}" == "-f" ]]; then
+    tail -f "$APP_LOG"
+  else
+    echo "=== $APP_LOG (last 80 lines) ==="
+    tail -n 80 "$APP_LOG"
+    echo ""
+    echo "Other logs: ${ROOT}/mcr_install.log ${LOG_DIR}/mcr_silent_install.log"
+    echo "Follow: $ROOT/LeGUI logs -f"
+  fi
+}
+
+cmd_stop() {
+  if [[ ! -f "$PID_FILE" ]]; then
+    echo "No pid file ($PID_FILE). If LeGUI is foreground-only, close the window or Ctrl+C." >&2
+    if pgrep -f "${ROOT}/LeGUI_Linux_v1.2/LeGUI_Linux" >/dev/null 2>&1; then
+      echo "Found LeGUI_Linux process(es):"
+      pgrep -af "${ROOT}/LeGUI_Linux_v1.2/LeGUI_Linux" || true
+      echo "Stop manually: pkill -f 'LeGUI_Linux_v1.2/LeGUI_Linux'" >&2
+    fi
+    exit 1
+  fi
+  local pid
+  pid="$(cat "$PID_FILE")"
+  if [[ -z "$pid" ]] || ! kill -0 "$pid" 2>/dev/null; then
+    echo "Stale pid file (process $pid not running). Removing $PID_FILE"
+    rm -f "$PID_FILE"
+    exit 0
+  fi
+  echo "Sending SIGTERM to pid $pid ..."
+  kill "$pid" 2>/dev/null || true
+  sleep 1
+  if kill -0 "$pid" 2>/dev/null; then
+    echo "Still running; SIGKILL"
+    kill -9 "$pid" 2>/dev/null || true
+  fi
+  rm -f "$PID_FILE"
+  echo "Stopped."
+}
+
+main() {
+  local cmd="${1:-help}"
+  shift || true
+  case "$cmd" in
+    install) cmd_install "$@" ;;
+    start) cmd_start "$@" ;;
+    logs) cmd_logs "$@" ;;
+    stop) cmd_stop "$@" ;;
+    checks|check) cmd_checks ;;
+    help|-h|--help) usage ;;
+    *)
+      echo "Unknown command: $cmd" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+}
+
+main "$@"
