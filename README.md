@@ -65,7 +65,8 @@ export LEGUI_MCR_ROOT=/path/to/MATLAB_Runtime/v911   # if non-default
 ./run_LeGUI.sh
 ```
 
-Cluster notes: `hpc/example_interactive_session.sh`.
+Cluster notes: `hpc/example_interactive_session.sh`.  
+**Open OnDemand:** use an interactive **Desktop** session in the browser, then run `./LeGUI start` in a terminal *inside that desktop* — see **`hpc/open_ondemand.md`**.
 
 ---
 
