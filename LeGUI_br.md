@@ -1,6 +1,6 @@
 # Builder Review — LeGUI (Davis et al. 2021) + local deployment
 
-Evaluation of the *Frontiers in Neuroscience* methods paper and this workspace’s implementation, using the **Inzira Labs Builder Review** framework (ten criteria grouped into layers: usability/reproducibility; performance/generalization; clinical relevance/integration). Full criteria templates and examples may be kept **locally** (e.g. Word/Markdown copies); they are **not** required in the minimal GitHub tree.
+Evaluation of the *Frontiers in Neuroscience* methods paper and this workspace’s implementation, using the **Inzira Labs Builder Review** style (usability, reproducibility, performance, generalization, clinical use, interpretability, integration, limitations, and builder-oriented conclusions). Full criteria templates may be kept **locally** (e.g. Word/Markdown copies); they are **not** required in the minimal GitHub tree.
 
 **Primary reference:** Davis TS, Caston RM, Philip B, et al. *LeGUI: A Fast and Accurate Graphical User Interface for Automated Detection and Anatomical Localization of Intracranial Electrodes.* Front Neurosci. 2021;15:769872. https://doi.org/10.3389/fnins.2021.769872
 
@@ -16,9 +16,9 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-# Layer 1 — Can it run?
+## Can it run?
 
-## Usability
+### Usability
 
 **Published offering**
 
@@ -31,7 +31,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 - **Friction:** **MATLAB Runtime R2021b** is large (~3.7 GB download); silent install is long; **GUI requires a display** (desktop, VNC, remote desktop, or X11 forwarding)—typical for the product class, but a hard constraint on headless batch clusters.
 - **Hidden steps:** Atlas licensing/SPM Anatomy toolbox behavior, DICOM quirks, and per-site CT/MRI quality still drive manual cleanup (false-positive electrodes, labeling), as the paper acknowledges.
 
-## Reproducibility
+### Reproducibility
 
 **What the paper supports**
 
@@ -50,9 +50,9 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-# Layer 2 — Does it work?
+## Does it work?
 
-## Performance (real vs reported)
+### Performance (real vs reported)
 
 **Paper**
 
@@ -64,31 +64,31 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 - On a new institution’s data, treat paper metrics as **prior**, not guarantee; local QC and optional hand correction remain part of the workflow.
 - **This build:** `verify_legui_setup.sh` confirms **dynamic linker** resolution against the bundled MCR; it does **not** benchmark segmentation or detection on imaging.
 
-## Generalization
+### Generalization
 
 - Trained/validated cohort is **epilepsy surgical monitoring** (Utah + small Washington set); generalization to **non-epilepsy** iEEG research is plausible but not demonstrated as a separate validation study.
 - **Scanner/protocol variability** is partially addressed (multi-site test in paper); extreme CT artifacts, unusual implants, or >250 contacts (default cap) need code/config attention.
 - **Regulatory:** paper states LeGUI is **not** FDA-evaluated; clinical use beyond research must respect local governance.
 
-## Comparison to existing methods
+### Comparison to existing methods
 
 - The paper’s **Table 1** positions LeGUI against tools like iElvis, ALICE, iElectrodes, iELU, iEEGView: different mixes of FreeSurfer dependency, runtime length, ECoG vs SEEG support, and unified GUI. **Builder takeaway:** LeGUI trades **FreeSurfer** depth for **SPM + shorter wall time** and **single-interface** operation, at the cost of depending on **MathWorks runtime** for compiled use.
 
 ---
 
-# Layer 3 — Can it be used?
+## Can it be used?
 
-## Clinical relevance
+### Clinical relevance
 
 - **High** for research groups localizing **SEEG/ECoG** for seizure networks or cognitive iEEG: outputs (MNI coordinates, atlas labels, gray/white) align with common analysis needs.
 - **Clinical production** (e.g. surgical planning CAD) is **out of scope** of the publication and this deployment; interpretability of labels still requires imaging QA and expert review at gyral boundaries.
 
-## Interpretability and trust
+### Interpretability and trust
 
 - **Strength:** Linked 2D/3D visualization, atlas overlays, inline SEEG projection, and explicit saved structures (`ChannelMap.mat`, etc.) support **inspection** of what the tool decided.
 - **Trust limits:** Automatic labels are only as good as normalization and atlas warping; the paper honestly notes finer mismatches (e.g. STG vs MTG at borders).
 
-## Integration potential
+### Integration potential
 
 - **Research integration:** Exports to MATLAB `.mat` / NIfTI ecosystem; custom MNI atlases via `atlases/` folder; natural adjacency to **BIDS**-organized DICOM→NIfTI workflows (manual or scripted upstream).
 - **Clinical integration:** Would still require DICOM routing, QC, identity/consent boundaries, and reporting layers—**not** provided here.
@@ -96,7 +96,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-# Limitations and failure modes
+## Limitations and failure modes
 
 - **GUI/display** requirement; headless automation is not the product’s design center.
 - **MATLAB Compiler Runtime** version lock-in with compiled releases; mismatched R2021b vs app build causes hard failures.
@@ -106,7 +106,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-# Builder insight
+## Builder insight
 
 LeGUI is **strong on runnable integration of a fragmented workflow** (one GUI, ECoG + SEEG, reasonable validation story). The **builder gap** for new sites is less about code availability and more about **environment + data harmonization**: pinning **MCR R2021b**, securing a **graphical execution path**, and budgeting **QC time** for electrode detection and labeling.
 
@@ -119,12 +119,12 @@ LeGUI is **strong on runnable integration of a fragmented workflow** (one GUI, E
 
 ---
 
-# References (selected)
+## References (selected)
 
 - Davis et al. 2021 *Front. Neurosci.* — LeGUI methods and validation (DOI above).
 - Rolston-Lab/LeGUI — source and releases: https://github.com/Rolston-Lab/LeGUI
 - `LeGUI.md` — concise paper summary in this folder.
-- Builder Review criteria (local or internal docs) — ten dimensions / layer grouping used for this review.
+- Builder Review criteria (local or internal docs) — full dimension list if needed for alignment with other reviews.
 
 ---
 
