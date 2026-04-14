@@ -8,6 +8,7 @@ LOG_DIR="${ROOT}/logs"
 APP_LOG="${LOG_DIR}/legui.log"
 RUN_SCRIPT="${ROOT}/run_LeGUI.sh"
 VERIFY_SCRIPT="${ROOT}/verify_legui_setup.sh"
+FETCH_SCRIPT="${ROOT}/fetch_linux_bundle.sh"
 MCR_DEST="${ROOT}/MATLAB_Runtime"
 MCR_UNZIP="${ROOT}/mcr_R2021b_unzip"
 
@@ -28,6 +29,9 @@ Usage: $(basename "$0") <command> [options]
 
   checks           Run full verification (${VERIFY_SCRIPT##*/})
 
+  fetch            Download Linux v1.2 app zip from Rolston-Lab releases into LeGUI_Linux_v1.2/
+                   (use --force to replace). Does not install MATLAB Runtime.
+
   help             Show this message
 
 Environment:
@@ -40,7 +44,17 @@ Examples:
   ./LeGUI start --background
   ./LeGUI logs -f
   ./LeGUI stop
+  ./LeGUI fetch
+  ./LeGUI fetch --force
 EOF
+}
+
+cmd_fetch() {
+  if [[ ! -x "$FETCH_SCRIPT" ]]; then
+    echo "ERROR: missing $FETCH_SCRIPT" >&2
+    exit 1
+  fi
+  exec "$FETCH_SCRIPT" "$@"
 }
 
 cmd_install() {
@@ -74,7 +88,16 @@ cmd_install() {
   fi
 
   echo "Running checks ..."
-  "$VERIFY_SCRIPT"
+  if ! "$VERIFY_SCRIPT"; then
+    echo "" >&2
+    if [[ ! -f "${ROOT}/LeGUI_Linux_v1.2/LeGUI_Linux" ]]; then
+      echo "Hint: download the Linux app with: $ROOT/LeGUI fetch" >&2
+    fi
+    if [[ ! -d "${ROOT}/MATLAB_Runtime/v911/runtime/glnxa64" ]]; then
+      echo "Hint: install MATLAB Runtime R2021b under ${ROOT}/MATLAB_Runtime/v911 (see README / INSTALL.txt)" >&2
+    fi
+    exit 1
+  fi
   echo "Install step complete. Start with: $ROOT/LeGUI start"
 }
 
@@ -168,6 +191,7 @@ main() {
     logs) cmd_logs "$@" ;;
     stop) cmd_stop "$@" ;;
     checks|check) cmd_checks ;;
+    fetch) cmd_fetch "$@" ;;
     help|-h|--help) usage ;;
     *)
       echo "Unknown command: $cmd" >&2

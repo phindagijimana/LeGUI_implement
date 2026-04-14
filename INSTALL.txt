@@ -2,7 +2,7 @@ LeGUI — what was installed on this machine (Apr 2026)
 ======================================================
 
 If you cloned only LeGUI_implement (minimal GitHub), add locally:
-  - LeGUI_Linux_v1.2/ from upstream release zip
+  - LeGUI_Linux_v1.2/  -> run: ./LeGUI fetch   (or unzip release zip manually)
   - MATLAB_Runtime/v911/ from MathWorks
   - optionally legui-repo/ from https://github.com/Rolston-Lab/LeGUI
 
