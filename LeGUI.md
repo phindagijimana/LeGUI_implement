@@ -70,4 +70,4 @@ MATLAB; anatomical localization; GUI; ECoG; software; SEEG; intracranial electro
 
 ## This workspace
 
-For the **installed app** (MATLAB Runtime, `./LeGUI` CLI with `install` / `start` / `logs` / `stop` / `checks`, and cluster notes), see [README.md](README.md) in the same directory.
+For **Option 1** (run on this machine only: `./LeGUI fetch`, MCR R2021b, `./LeGUI start`), see [README.md](README.md).
