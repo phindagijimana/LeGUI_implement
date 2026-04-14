@@ -38,7 +38,7 @@ If you already have an unpacked installer in `./mcr_R2021b_unzip/`, you can run:
 
 ### 3) Prepare, verify, launch
 
-Use a **graphical session** (desktop, VNC/OnDemand, or `ssh -Y`).
+Use a **graphical session** (local desktop, VNC, remote desktop in the browser, or `ssh -Y`).
 
 ```bash
 ./LeGUI install    # permissions, logs dir
@@ -65,8 +65,7 @@ export LEGUI_MCR_ROOT=/path/to/MATLAB_Runtime/v911   # if non-default
 ./run_LeGUI.sh
 ```
 
-Cluster notes: `hpc/example_interactive_session.sh`.  
-**Open OnDemand:** use an interactive **Desktop** session in the browser, then run `./LeGUI start` in a terminal *inside that desktop* — see **`hpc/open_ondemand.md`**.
+Cluster notes: `hpc/example_interactive_session.sh`.
 
 ---
 

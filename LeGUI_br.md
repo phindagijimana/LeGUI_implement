@@ -28,7 +28,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 **This implementation**
 
 - **Strength:** One command surface (`./LeGUI install` → `./LeGUI start`) after MCR is present; `checks` wraps filesystem + `ldd` validation.
-- **Friction:** **MATLAB Runtime R2021b** is large (~3.7 GB download); silent install is long; **GUI requires a display** (desktop, VNC/OnDemand, or X11 forwarding)—typical for the product class, but a hard constraint on headless batch clusters.
+- **Friction:** **MATLAB Runtime R2021b** is large (~3.7 GB download); silent install is long; **GUI requires a display** (desktop, VNC, remote desktop, or X11 forwarding)—typical for the product class, but a hard constraint on headless batch clusters.
 - **Hidden steps:** Atlas licensing/SPM Anatomy toolbox behavior, DICOM quirks, and per-site CT/MRI quality still drive manual cleanup (false-positive electrodes, labeling), as the paper acknowledges.
 
 ## Reproducibility

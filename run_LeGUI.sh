@@ -23,7 +23,7 @@ if [[ -z "${DISPLAY:-}" && -z "${WAYLAND_DISPLAY:-}" ]]; then
   echo "WARNING: DISPLAY and WAYLAND_DISPLAY are unset. LeGUI is a GUI and usually needs:" >&2
   echo "  - a desktop session, or" >&2
   echo "  - ssh -Y user@host  (X11 forwarding), or" >&2
-  echo "  - a VNC / Open OnDemand desktop on your cluster." >&2
+  echo "  - a VNC or browser-based remote desktop on your cluster." >&2
 fi
 
 exec "$LG_BIN" "$MCR_ROOT" "$@"

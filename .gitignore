@@ -25,5 +25,8 @@ mcr_download.log
 logs/
 .legui.pid
 
+# Local-only cluster notes (not published)
+hpc/open_ondemand.md
+
 # OS
 .DS_Store
