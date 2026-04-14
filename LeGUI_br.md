@@ -91,7 +91,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 ### Integration potential
 
 - **Research integration:** Exports to MATLAB `.mat` / NIfTI ecosystem; custom MNI atlases via `atlases/` folder; natural adjacency to **BIDS**-organized DICOM→NIfTI workflows (manual or scripted upstream).
-- **Clinical integration:** Would still require DICOM routing, QC, identity/consent boundaries, and reporting layers—**not** provided here.
+- **Clinical integration:** Would still require DICOM routing, QC, identity/consent boundaries, and clinical reporting—**not** provided here.
 - **This repo’s CLI** improves **operability** (install/check/start/logs/stop) but does not add HL7/PACS connectors.
 
 ---
