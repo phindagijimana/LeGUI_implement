@@ -16,7 +16,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-## Can it run?
+## Platform fit and reproducibility
 
 ### Usability
 
@@ -50,7 +50,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-## Does it work?
+## Performance, generalization, and comparison
 
 ### Performance (real vs reported)
 
@@ -76,7 +76,7 @@ This workspace adds a **deployment shell**: MATLAB Runtime install, verification
 
 ---
 
-## Can it be used?
+## Clinical relevance, interpretability, and integration
 
 ### Clinical relevance
 
