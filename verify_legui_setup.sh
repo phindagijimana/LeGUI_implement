@@ -38,33 +38,40 @@ if [[ -d "${HERE}/LeGUI_Linux_v1.2/atlases" ]] && [[ -z "$(find "${HERE}/LeGUI_L
 fi
 
 echo ""
-echo "=== MCR install log (last success line) ==="
+echo "=== MCR install log (optional) ==="
 if [[ -f "${HERE}/mcr_install.log" ]]; then
   if grep -q "End - Successful" "${HERE}/mcr_install.log"; then
     echo "OK  mcr_install.log reports success"
   else
     echo "WARN mcr_install.log does not contain 'End - Successful'" >&2
-    ERR=1
   fi
 else
-  echo "WARN no mcr_install.log" >&2
+  echo "SKIP no mcr_install.log (normal after a fresh clone)"
 fi
 
 echo ""
 echo "=== Dynamic linker (LeGUI vs MCR) ==="
 MCR="${HERE}/MATLAB_Runtime/v911"
-export LD_LIBRARY_PATH=.:${MCR}/runtime/glnxa64:${MCR}/bin/glnxa64:${MCR}/sys/os/glnxa64:${MCR}/sys/opengl/lib/glnxa64
-missing="$(ldd "${HERE}/LeGUI_Linux_v1.2/LeGUI_Linux" 2>&1 | grep 'not found' || true)"
-if [[ -n "$missing" ]]; then
-  echo "$missing" >&2
-  ERR=1
+if [[ -f "${HERE}/LeGUI_Linux_v1.2/LeGUI_Linux" ]]; then
+  export LD_LIBRARY_PATH=.:${MCR}/runtime/glnxa64:${MCR}/bin/glnxa64:${MCR}/sys/os/glnxa64:${MCR}/sys/opengl/lib/glnxa64
+  missing="$(ldd "${HERE}/LeGUI_Linux_v1.2/LeGUI_Linux" 2>&1 | grep 'not found' || true)"
+  if [[ -n "$missing" ]]; then
+    echo "$missing" >&2
+    ERR=1
+  else
+    echo "OK  no missing shared libraries in ldd output"
+  fi
 else
-  echo "OK  no missing shared libraries in ldd output"
+  echo "SKIP ldd (LeGUI binary not present yet)"
 fi
 
 echo ""
 echo "=== Source tree (optional) ==="
-check_dir "git clone legui-repo" "${HERE}/legui-repo/LeGUI"
+if [[ -d "${HERE}/legui-repo/LeGUI" ]]; then
+  echo "OK  legui-repo present (local clone)"
+else
+  echo "SKIP legui-repo (clone https://github.com/Rolston-Lab/LeGUI.git if you need source)"
+fi
 
 if [[ "$ERR" -ne 0 ]]; then
   echo ""

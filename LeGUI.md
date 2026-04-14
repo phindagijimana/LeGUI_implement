@@ -64,7 +64,7 @@ MATLAB; anatomical localization; GUI; ECoG; software; SEEG; intracranial electro
 
 ---
 
-*Summary prepared from the published PDF in this folder; for exact wording, figures, and supplementary material, refer to the original article.*
+*Summary prepared from the published paper; for exact wording, figures, and supplementary material, see the [open-access article](https://www.frontiersin.org/articles/10.3389/fnins.2021.769872/full). A local PDF copy is optional.*
 
 ---
 

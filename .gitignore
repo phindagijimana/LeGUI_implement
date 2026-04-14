@@ -1,21 +1,28 @@
-# Local MATLAB Runtime install (multi-GB; install per README)
+# --- Keep local only (not on GitHub) ---
+
+# MATLAB Runtime (multi-GB; install from MathWorks)
 MATLAB_Runtime/
 
-# Large MATLAB Runtime installer artifacts
-mcr_R2021b_glnxa64.zip
-mcr_R2021b_unzip/
+# Upstream full source + SPM (clone separately: github.com/Rolston-Lab/LeGUI)
+legui-repo/
+
+# Compiled Linux app + atlases (download release zip from Rolston-Lab/LeGUI releases)
+LeGUI_Linux_v1.2/
 LeGUI_Linux_v1.2.zip
 
-# Logs
+# MCR installer artifacts
+mcr_R2021b_glnxa64.zip
+mcr_R2021b_unzip/
+
+# Optional local copies of reference material
+LeGUI.pdf
+build_reviewer.docx
+sustain_br.md
+
+# Logs and runtime state
 mcr_download.log
 *.log
 logs/
-
-# Optional: omit binary bundle from git (uncomment if versioning this folder)
-# LeGUI_Linux_v1.2.zip
-# LeGUI_Linux_v1.2/LeGUI_Linux
-
-# Runtime state
 .legui.pid
 
 # OS

@@ -1,12 +1,10 @@
 # Builder Review — LeGUI (Davis et al. 2021) + local deployment
 
-Evaluation of the *Frontiers in Neuroscience* methods paper and this workspace’s implementation, using the **Inzira Labs Builder Review** dimensions defined in **`build_reviewer.docx`** (ten criteria grouped into layers). The narrative layout follows the same pattern as **`sustain_br.md`** (short posts can collapse to: usability/reproducibility; performance/generalization; clinical relevance/integration).
-
-**Framework references:** `build_reviewer.docx` (full criteria + layer grouping), `sustain_br.md` (example application of the framework).
+Evaluation of the *Frontiers in Neuroscience* methods paper and this workspace’s implementation, using the **Inzira Labs Builder Review** framework (ten criteria grouped into layers: usability/reproducibility; performance/generalization; clinical relevance/integration). Full criteria templates and examples may be kept **locally** (e.g. Word/Markdown copies); they are **not** required in the minimal GitHub tree.
 
 **Primary reference:** Davis TS, Caston RM, Philip B, et al. *LeGUI: A Fast and Accurate Graphical User Interface for Automated Detection and Anatomical Localization of Intracranial Electrodes.* Front Neurosci. 2021;15:769872. https://doi.org/10.3389/fnins.2021.769872
 
-**Local kit (this directory):** `LeGUI` (CLI), `run_LeGUI.sh`, `MATLAB_Runtime/v911/`, `LeGUI_Linux_v1.2/`, `legui-repo/` (source + bundled SPM12), `verify_legui_setup.sh`, `README.md`, `LeGUI.md` (paper summary).
+**Typical local layout:** `LeGUI` (CLI), `run_LeGUI.sh`, `verify_legui_setup.sh`, docs; plus **locally obtained** `MATLAB_Runtime/v911/`, `LeGUI_Linux_v1.2/` (release zip), and optionally `legui-repo/` from [Rolston-Lab/LeGUI](https://github.com/Rolston-Lab/LeGUI).
 
 ---
 
@@ -126,8 +124,7 @@ LeGUI is **strong on runnable integration of a fragmented workflow** (one GUI, E
 - Davis et al. 2021 *Front. Neurosci.* — LeGUI methods and validation (DOI above).
 - Rolston-Lab/LeGUI — source and releases: https://github.com/Rolston-Lab/LeGUI
 - `LeGUI.md` — concise paper summary in this folder.
-- `build_reviewer.docx` — Builder Review criteria and layer definitions.
-- `sustain_br.md` — example Builder Review using the same layered presentation.
+- Builder Review criteria (local or internal docs) — ten dimensions / layer grouping used for this review.
 
 ---
 

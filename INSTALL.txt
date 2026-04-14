@@ -1,6 +1,11 @@
 LeGUI — what was installed on this machine (Apr 2026)
 ======================================================
 
+If you cloned only LeGUI_implement (minimal GitHub), add locally:
+  - LeGUI_Linux_v1.2/ from upstream release zip
+  - MATLAB_Runtime/v911/ from MathWorks
+  - optionally legui-repo/ from https://github.com/Rolston-Lab/LeGUI
+
 Quick reference: README.md in this folder (table of contents + commands).
 
 CLI (recommended):
@@ -43,8 +48,9 @@ Optional disk cleanup: ./post_install_cleanup.sh --yes
      addpath(fullfile(pwd, 'icons'))
      LeGUI
 
-5) Documentation in the clone
-   legui-repo/LeGUI_InstallationGuide.pdf
-   legui-repo/LeGUI_UserManual.pdf
+5) Documentation (PDF)
+   In legui-repo after clone, or on GitHub:
+   https://github.com/Rolston-Lab/LeGUI/blob/main/LeGUI_InstallationGuide.pdf
+   https://github.com/Rolston-Lab/LeGUI/blob/main/LeGUI_UserManual.pdf
 
 6) Optional: LeGUI_Linux_v1.2.zip (~38 MB) can be deleted if the folder LeGUI_Linux_v1.2/ is intact.
